@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export class ChannelForm extends Component {
+export class UserForm extends Component {
 	static propTypes = {
-		addChannel: PropTypes.func.isRequired,
+		setUsername: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -11,10 +11,9 @@ export class ChannelForm extends Component {
 	};
 
 	onInputChange = e => this.setState({ name: e.target.value });
-
 	onSubmit = e => {
 		e.preventDefault();
-		this.props.addChannel(this.state.name);
+		this.props.setUsername(this.state.name);
 		return this.setState({ name: '' });
 	};
 
@@ -24,11 +23,11 @@ export class ChannelForm extends Component {
 				<div className="form-group">
 					<input
 						className="form-control"
-						placeholder="New Cool Channel"
+						placeholder="Your Name"
 						type="text"
 						value={this.state.name}
 						onChange={this.onInputChange}
-						name="channel-name"
+						name="username"
 					/>
 				</div>
 			</form>
@@ -36,4 +35,4 @@ export class ChannelForm extends Component {
 	}
 }
 
-export default ChannelForm;
+export default UserForm;

@@ -5,7 +5,7 @@ const Channel = ({ channel, setChannel, activeChannel }) => {
 	const active = channel.id === activeChannel ? 'active' : '';
 	const onSetChannel = e => {
 		e.preventDefault();
-		return setChannel(channel.id);
+		return setChannel(channel);
 	};
 
 	return (
@@ -18,7 +18,7 @@ const Channel = ({ channel, setChannel, activeChannel }) => {
 Channel.propTypes = {
 	channel: PropTypes.shape({}).isRequired,
 	setChannel: PropTypes.func.isRequired,
-	activeChannel: PropTypes.string.isRequired,
+	activeChannel: PropTypes.shape({}).isRequired,
 };
 
 export default Channel;

@@ -9,7 +9,7 @@ export class ChannelSection extends Component {
 		channels: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 		setChannel: PropTypes.func.isRequired,
 		addChannel: PropTypes.func.isRequired,
-		activeChannel: PropTypes.string.isRequired,
+		activeChannel: PropTypes.shape({}).isRequired,
 	};
 
 	render() {
