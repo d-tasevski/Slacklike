@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const Message = ({ message: { author, body, createdAt } }) => {
 	return (
-		<li className="message">
+		<li className="message text-light">
 			<div className="author">
 				<strong>{author}</strong>
 				<i className="timestamp">{moment(createdAt).format('HH:mm:ss, DD MMM')}</i>

@@ -15,11 +15,11 @@ export class ChannelSection extends Component {
 		const { users, setUsername, activeUser } = this.props;
 
 		return (
-			<div className="support panel panel-primary">
-				<div className="panel-heading">
+			<div className="support card bg-light">
+				<div className="card-header">
 					<strong>Users</strong>
 				</div>
-				<div className="panel body channels">
+				<div className="card-body channels">
 					<UserList activeUser={activeUser} users={users} />
 					<UserForm setUsername={setUsername} />
 				</div>

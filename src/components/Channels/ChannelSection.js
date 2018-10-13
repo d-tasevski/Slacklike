@@ -16,11 +16,11 @@ export class ChannelSection extends Component {
 		const { setChannel, channels, addChannel, activeChannel } = this.props;
 
 		return (
-			<div className="support panel panel-primary">
-				<div className="panel-heading">
+			<div className="support card bg-dark text-light">
+				<div className="card-header">
 					<strong>Channels</strong>
 				</div>
-				<div className="panel body channels">
+				<div className="card-body channels">
 					<ChannelList
 						activeChannel={activeChannel}
 						channels={channels}

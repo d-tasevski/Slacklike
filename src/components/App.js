@@ -37,7 +37,7 @@ class App extends Component {
 
 	render() {
 		return (
-			<div className="app">
+			<div className="app bg-info">
 				<div className="nav">
 					<ChannelSection
 						{...this.state}
