@@ -14,13 +14,22 @@ export class ChannelForm extends Component {
 
 	onSubmit = e => {
 		e.preventDefault();
-		return this.props.addChannel(this.state.name);
+		this.props.addChannel(this.state.name);
+		return this.setState({ name: '' });
 	};
 
 	render() {
 		return (
 			<form onSubmit={this.onSubmit}>
-				<input type="text" value={this.state.name} onChange={this.onInputChange} />
+				<div className="form-group">
+					<input
+						className="form-control"
+						placeholder="New Cool Channel"
+						type="text"
+						value={this.state.name}
+						onChange={this.onInputChange}
+					/>
+				</div>
 			</form>
 		);
 	}
