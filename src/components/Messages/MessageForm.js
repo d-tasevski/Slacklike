@@ -21,6 +21,7 @@ export class MessageForm extends Component {
 			createdAt: new Date(),
 			author: 'Thomas', // TBD
 			id: uuid(),
+			channelId: this.props.activeChannel.id,
 		};
 		this.props.createMessage(message);
 		return this.setState({ body: '' });

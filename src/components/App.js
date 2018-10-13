@@ -30,7 +30,11 @@ class App extends Component {
 		this.socket.on('ban-user', this.onBanUser);
 	}
 
-	onConnect = () => this.setState({ connected: true });
+	onConnect = () => {
+		this.setState({ connected: true });
+		this.socket.emit('subscribe-channel');
+		this.socket.emit('subscribe-user');
+	};
 	onDisconnect = () => this.setState({ connected: false });
 
 	createChannel = channel => this.socket.emit('create-channel', channel);
@@ -50,7 +54,11 @@ class App extends Component {
 		return this.setState({ users });
 	};
 
-	setActiveChannel = activeChannel => this.setState({ activeChannel });
+	setActiveChannel = activeChannel => {
+		this.socket.emit('unsubscribe-message');
+		this.setState({ activeChannel, messages: [] });
+		this.socket.emit('subscribe-message', { channelId: activeChannel.id });
+	};
 
 	render() {
 		return (
