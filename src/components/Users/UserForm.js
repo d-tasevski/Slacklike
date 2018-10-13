@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuid/v4';
 
 export class UserForm extends Component {
 	static propTypes = {
-		setUsername: PropTypes.func.isRequired,
+		createUser: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -13,7 +14,11 @@ export class UserForm extends Component {
 	onInputChange = e => this.setState({ name: e.target.value });
 	onSubmit = e => {
 		e.preventDefault();
-		this.props.setUsername(this.state.name);
+		const user = {
+			name: this.state.name,
+			id: uuid(),
+		};
+		this.props.createUser(user);
 		return this.setState({ name: '' });
 	};
 

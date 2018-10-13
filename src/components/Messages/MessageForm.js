@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuid/v4';
 
 export class MessageForm extends Component {
 	static propTypes = {
 		activeChannel: PropTypes.shape({ name: PropTypes.string }),
-		addMessage: PropTypes.func.isRequired,
+		createMessage: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -15,7 +16,13 @@ export class MessageForm extends Component {
 
 	onSubmit = e => {
 		e.preventDefault();
-		this.props.addMessage(this.state.body);
+		const message = {
+			body: this.state.body,
+			createdAt: new Date(),
+			author: 'Thomas', // TBD
+			id: uuid(),
+		};
+		this.props.createMessage(message);
 		return this.setState({ body: '' });
 	};
 

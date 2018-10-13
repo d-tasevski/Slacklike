@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import uuid from 'uuid/v4';
 
 import './app.css';
-
+import Socket from '../Socket';
 import ChannelSection from './Channels/ChannelSection';
 import UserSection from './Users/UserSection';
 import MessageSection from './Messages/MessageSection';
@@ -18,40 +17,40 @@ class App extends Component {
 	};
 
 	componentDidMount() {
-		this.ws = new WebSocket('ws://echo.websocket.org');
-		this.ws.onmessage = this.onMessage;
-		this.ws.onopen = this.onOpen;
-		this.ws.onclose = this.onClose;
+		this.socket = new Socket();
+
+		this.socket.on('connect', this.onConnect);
+		this.socket.on('disconnect', this.onDisconnect);
+
+		this.socket.on('create-channel', this.onAddChannel);
+		this.socket.on('create-user', this.onAddUser);
+		this.socket.on('create-message', this.onAddMessage);
+
+		this.socket.on('edit-user', this.onEditUser);
+		this.socket.on('ban-user', this.onBanUser);
 	}
 
-	onMessage = e => {
-		const event = JSON.parse(e.data);
-		console.log(e);
-		console.log(event);
-		if (event.name === 'add-channel') {
-			this.addChannel(event.data);
-		}
-	};
-	onOpen = () => this.setState({ connected: true });
-	onClose = () => this.setState({ connected: false });
+	onConnect = () => this.setState({ connected: true });
+	onDisconnect = () => this.setState({ connected: false });
 
-	setUsername = name => this.setState({ users: [...this.state.users, { id: uuid(), name }] });
-	setChannel = activeChannel => this.setState({ activeChannel });
-	addChannel = channel => this.setState({ channels: [...this.state.channels, channel] });
-	createChannel = name => {
-		const msg = {
-			name: 'add-channel',
-			data: { name, id: uuid() },
-		};
-		return this.ws.send(JSON.stringify(msg));
+	createChannel = channel => this.socket.emit('create-channel', channel);
+	createMessage = message => this.socket.emit('create-message', message);
+	createUser = user => this.socket.emit('create-user', user);
+
+	onAddChannel = channel => this.setState({ channels: [...this.state.channels, channel] });
+	onAddMessage = message => this.setState({ messages: [...this.state.messages, message] });
+	onAddUser = user => this.setState({ users: [...this.state.users, user] });
+
+	onEditUser = user => {
+		const users = this.state.users.filter(u => u.id !== user.id);
+		return this.setState({ users: [...users, user] });
+	};
+	onBanUser = user => {
+		const users = this.state.users.filter(u => u.id !== user.id);
+		return this.setState({ users });
 	};
 
-	addMessage = (body, author) => {
-		const createdAt = new Date();
-		this.setState({
-			messages: [...this.state.messages, { id: uuid(), body, author, createdAt }],
-		});
-	};
+	setActiveChannel = activeChannel => this.setState({ activeChannel });
 
 	render() {
 		return (
@@ -59,12 +58,12 @@ class App extends Component {
 				<div className="nav">
 					<ChannelSection
 						{...this.state}
-						setChannel={this.setChannel}
+						setChannel={this.setActiveChannel}
 						createChannel={this.createChannel}
 					/>
-					<UserSection {...this.state} setUsername={this.setUsername} />
+					<UserSection {...this.state} createUser={this.createUser} />
 				</div>
-				<MessageSection {...this.state} addMessage={this.addMessage} />
+				<MessageSection {...this.state} createMessage={this.createMessage} />
 			</div>
 		);
 	}
