@@ -21,7 +21,7 @@ const ChannelList = ({ channels, setChannel, activeChannel }) => {
 ChannelList.propTypes = {
 	channels: PropTypes.arrayOf(PropTypes.shape({})),
 	setChannel: PropTypes.func.isRequired,
-	activeChannel: PropTypes.string.isRequired,
+	activeChannel: PropTypes.shape({}).isRequired,
 };
 
 export default ChannelList;
