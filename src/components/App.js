@@ -14,12 +14,36 @@ class App extends Component {
 		messages: [],
 		activeChannel: {},
 		activeUser: {},
+		connected: false,
 	};
 
+	componentDidMount() {
+		this.ws = new WebSocket('ws://echo.websocket.org');
+		this.ws.onmessage = this.onMessage;
+		this.ws.onopen = this.onOpen;
+		this.ws.onclose = this.onClose;
+	}
+
+	onMessage = e => {
+		const event = JSON.parse(e.data);
+		console.log(e);
+		console.log(event);
+		if (event.name === 'add-channel') {
+			this.addChannel(event.data);
+		}
+	};
+	onOpen = () => this.setState({ connected: true });
+	onClose = () => this.setState({ connected: false });
+
+	setUsername = name => this.setState({ users: [...this.state.users, { id: uuid(), name }] });
 	setChannel = activeChannel => this.setState({ activeChannel });
-	addChannel = name => {
-		this.setState({ channels: [...this.state.channels, { id: uuid(), name }] });
-		// TBD - Send to server
+	addChannel = channel => this.setState({ channels: [...this.state.channels, channel] });
+	createChannel = name => {
+		const msg = {
+			name: 'add-channel',
+			data: { name, id: uuid() },
+		};
+		return this.ws.send(JSON.stringify(msg));
 	};
 
 	addMessage = (body, author) => {
@@ -27,12 +51,6 @@ class App extends Component {
 		this.setState({
 			messages: [...this.state.messages, { id: uuid(), body, author, createdAt }],
 		});
-		// TBD - Send to server
-	};
-
-	setUsername = name => {
-		this.setState({ users: [...this.state.users, { id: uuid(), name }] });
-		// TBD - Send to server
 	};
 
 	render() {
@@ -42,7 +60,7 @@ class App extends Component {
 					<ChannelSection
 						{...this.state}
 						setChannel={this.setChannel}
-						addChannel={this.addChannel}
+						createChannel={this.createChannel}
 					/>
 					<UserSection {...this.state} setUsername={this.setUsername} />
 				</div>

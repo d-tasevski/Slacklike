@@ -8,12 +8,12 @@ export class ChannelSection extends Component {
 	static propTypes = {
 		channels: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 		setChannel: PropTypes.func.isRequired,
-		addChannel: PropTypes.func.isRequired,
+		createChannel: PropTypes.func.isRequired,
 		activeChannel: PropTypes.shape({}).isRequired,
 	};
 
 	render() {
-		const { setChannel, channels, addChannel, activeChannel } = this.props;
+		const { setChannel, channels, createChannel, activeChannel } = this.props;
 
 		return (
 			<div className="support card bg-dark text-light">
@@ -26,7 +26,7 @@ export class ChannelSection extends Component {
 						channels={channels}
 						setChannel={setChannel}
 					/>
-					<ChannelForm addChannel={addChannel} />
+					<ChannelForm createChannel={createChannel} />
 				</div>
 			</div>
 		);

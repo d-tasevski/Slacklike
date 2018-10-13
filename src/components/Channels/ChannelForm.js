@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export class ChannelForm extends Component {
 	static propTypes = {
-		addChannel: PropTypes.func.isRequired,
+		createChannel: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -14,7 +14,7 @@ export class ChannelForm extends Component {
 
 	onSubmit = e => {
 		e.preventDefault();
-		this.props.addChannel(this.state.name);
+		this.props.createChannel(this.state.name);
 		return this.setState({ name: '' });
 	};
 
