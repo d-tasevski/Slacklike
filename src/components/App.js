@@ -17,7 +17,8 @@ class App extends Component {
 	};
 
 	componentDidMount() {
-		this.socket = new Socket();
+		const ws = new WebSocket('ws://localhost:4000');
+		this.socket = new Socket(ws);
 
 		this.socket.on('connect', this.onConnect);
 		this.socket.on('disconnect', this.onDisconnect);
