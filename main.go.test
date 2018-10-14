@@ -1,0 +1,83 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/gorilla/websocket"
+	"github.com/mitchellh/mapstructure"
+)
+
+// Message : representation of the channel message
+type Message struct {
+	Name string      `json:"name"`
+	Data interface{} `json:"data"`
+}
+
+// Channel : representation of the channel
+type Channel struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
+}
+
+func main() {
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":4000", nil)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for {
+		var inMessage Message
+		var outMessage Message
+		if err := socket.ReadJSON(&inMessage); err != nil {
+			fmt.Println(err)
+			break
+		}
+		switch inMessage.Name {
+		case "create-channel":
+			err := createChannel(inMessage.Data)
+			if err != nil {
+				outMessage = Message{"error", err}
+				if err := socket.WriteJSON(outMessage); err != nil {
+					fmt.Println(err)
+					break
+				}
+			}
+		case "subscribe-channel":
+			go subscribeChannel(socket)
+		}
+	}
+}
+
+func createChannel(data interface{}) error {
+	var channel Channel
+	err := mapstructure.Decode(data, &channel)
+	if err != nil {
+		return err
+	}
+
+	channel.ID = "1"
+	fmt.Printf("%#v\n", channel)
+	fmt.Println("Channel created")
+	return nil
+}
+
+func subscribeChannel(socket *websocket.Conn) {
+	for {
+		time.Sleep(time.Second * 1)
+		message := Message{"create-channel", Channel{"1", "Software Support"}}
+		socket.WriteJSON(message)
+		fmt.Println("Subscribed to channel")
+	}
+}
