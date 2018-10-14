@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuid/v4';
 
 export class ChannelForm extends Component {
 	static propTypes = {
-		addChannel: PropTypes.func.isRequired,
+		createChannel: PropTypes.func.isRequired,
 	};
 
 	state = {
@@ -14,7 +15,11 @@ export class ChannelForm extends Component {
 
 	onSubmit = e => {
 		e.preventDefault();
-		this.props.addChannel(this.state.name);
+		const channel = {
+			name: this.state.name,
+			id: uuid(),
+		};
+		this.props.createChannel(channel);
 		return this.setState({ name: '' });
 	};
 

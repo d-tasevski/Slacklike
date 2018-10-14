@@ -1,0 +1,60 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+// Message : representation of the channel message
+type Message struct {
+	Name string      `json:"name"`
+	Data interface{} `json:"data"`
+}
+
+// Client : representation of the client routine
+type Client struct {
+	send chan Message
+}
+
+func (client *Client) write() {
+	for msg := range client.send {
+		fmt.Printf("%#v\n", msg)
+	}
+}
+
+func (client *Client) subscribeChannels() {
+	for {
+		time.Sleep(r())
+		client.send <- Message{"create-channel", ""}
+	}
+}
+func (client *Client) subscribeMessages() {
+	for {
+		time.Sleep(r())
+		client.send <- Message{"create-message", ""}
+	}
+}
+
+func r() time.Duration {
+	return time.Millisecond * time.Duration(rand.Intn(1000))
+}
+
+func NewClient() *Client {
+	return &Client{
+		send: make(chan Message),
+	}
+}
+
+func main() {
+	// msgChan := make(chan string)
+	// go func() {
+	// 	msgChan <- "Hello"
+	// }()
+	// msg := <-msgChan
+	client := NewClient()
+	go client.subscribeChannels()
+	go client.subscribeMessages()
+	client.write()
+
+}

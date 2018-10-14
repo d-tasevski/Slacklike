@@ -7,12 +7,12 @@ import UserForm from './UserForm';
 export class ChannelSection extends Component {
 	static propTypes = {
 		users: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-		setUsername: PropTypes.func.isRequired,
+		createUser: PropTypes.func.isRequired,
 		activeUser: PropTypes.shape({}).isRequired,
 	};
 
 	render() {
-		const { users, setUsername, activeUser } = this.props;
+		const { users, createUser, activeUser } = this.props;
 
 		return (
 			<div className="support card bg-light">
@@ -21,7 +21,7 @@ export class ChannelSection extends Component {
 				</div>
 				<div className="card-body channels">
 					<UserList activeUser={activeUser} users={users} />
-					<UserForm setUsername={setUsername} />
+					<UserForm createUser={createUser} />
 				</div>
 			</div>
 		);
